@@ -73,6 +73,10 @@ func init() {
 
 // Str converts a byte slice to a string without making any copy or allocations.// The content of the underlying byte slice _must_ not be changed.
 func Str(b []byte) (s string) {
+	if b == nil {
+		s = ""
+		return
+	}
 	s = *(*string)(unsafe.Pointer(&b))
 	return
 }
@@ -80,6 +84,9 @@ func Str(b []byte) (s string) {
 // Bytes converts a string to a byte slice without any copy or allocations.
 // The content of the resulting byte slice _must_ not be changed.
 func Bytes(s string) []byte {
+	if s == "" {
+		return []byte{}
+	}
 	const MaxInt32 = 1<<31 - 1
 	// convert s data pointer to huge max byte array pointer ([MaxInt32]byte)
 	// and then take a slice of it.
